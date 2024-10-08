@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Services.API.Entities;
+using static System.Net.WebRequestMethods;
 
 namespace Services.API.Data;
 
@@ -50,8 +51,8 @@ namespace Services.API.Data;
 
         var productFaker = new Faker<Product>()
             .RuleFor(p => p.Name, f => f.Commerce.ProductName())
-            .RuleFor(p => p.Description, f => f.Commerce.ProductDescription())
-            .RuleFor(p => p.PictureUrl, f => f.Internet.Avatar());
+            .RuleFor(p => p.Description, f => f.Commerce.ProductDescription());
+           
            
 
 
@@ -59,10 +60,12 @@ namespace Services.API.Data;
         {
             for (int i = 0; i < 50; i++)
             {
+                var randomImage = new Random().Next(1, 1000);
                 var product = productFaker.Generate();
                 product.Category = category;
                 product.CategoryId = category.Id;
                 product.Price = 200;
+                product.PictureUrl = $"https://picsum.photos/id/{randomImage}/200/300";
                 product.Id = Guid.NewGuid();
                 product.Type = string.Empty;
                 product.Brand = string.Empty;
